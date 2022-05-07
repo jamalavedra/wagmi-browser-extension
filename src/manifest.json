@@ -1,0 +1,58 @@
+{
+    "name": "Wagmi",
+    "short_name": "Wagmi",
+    "version": "0.0.1",
+    "description": "This is my test for creating an extension that improves on google search",
+    "background": {
+        "scripts": ["lib/browser-polyfill.js", "background.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["lib/browser-polyfill.js", "content_script.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "browser_action": {
+        "default_title": "Wagmi",
+        "default_popup": "./popup.html"
+    },
+    "commands": {
+        "openOverview": {
+            "description": "Open Search Overview"
+        }
+    },
+    "icons": {
+        "16": "./img/worldbrain-logo-narrow-bw-16.png",
+        "48": "./img/worldbrain-logo-narrow-bw-48.png",
+        "128": "./img/worldbrain-logo-narrow.png"
+    },
+    "permissions": [
+        "<all_urls>",
+        "alarms",
+        "idle",
+        "bookmarks",
+        "history",
+        "contextMenus",
+        "tabs",
+        "webNavigation",
+        "notifications",
+        "unlimitedStorage",
+        "storage",
+        "webRequest",
+        "webRequestBlocking"
+    ],
+    "web_accessible_resources": [
+        "/img/*",
+        "/content_script*.css",
+        "/fonts/*",
+        "content_script_*.js",
+        "file:/*",
+        "chrome-extension:/*",
+        "blob:*",
+        "data:*",
+        "filesystem:/*"
+    ],
+    "content_security_policy": "script-src 'self'; object-src 'self'; connect-src http: https: data: blob: wss: file:",
+    "manifest_version": 2
+}

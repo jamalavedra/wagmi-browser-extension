@@ -1,0 +1,88 @@
+import process from 'process'
+import dotenv from 'dotenv'
+import path from 'path'
+
+import { doesFileExist } from './util'
+
+export const envPaths = {
+    development: path.resolve(__dirname, '../private/.env.development'),
+    production: path.resolve(__dirname, '../private/.env.production'),
+    fallback: path.resolve(__dirname, '../.env.example'),
+}
+
+export function determineEnvPath({ mode }) {
+    if (mode === 'development') {
+        return doesFileExist(envPaths.development)
+            ? envPaths.development
+            : envPaths.fallback
+    }
+
+    if (doesFileExist(envPaths.production)) {
+        return envPaths.production
+    }
+
+    console.error(
+        `FATAL ERROR: production env file does not exist:\n${envPaths.production}\n`,
+    )
+    process.exit(1)
+}
+
+export default ({ mode }) => {
+    const envPath = determineEnvPath({ mode })
+    console.log('USING ENV FILE:', envPath)
+    dotenv.config({ path: envPath })
+
+    const env = {
+        VERSION: process.env.npm_package_version,
+        PIWIK_SITE_ID: '1',
+        DEBUG_ANALYTICS_EVENTS: '',
+        NODE_ENV: mode,
+        BACKUP_BACKEND: '',
+        AUTOMATIC_BACKUP: '',
+        AUTOMATIC_BACKUP_PAYMENT_SUCCESS: '',
+        MOCK_BACKUP_BACKEND: '',
+        STORE_BACKUP_TIME: 'true',
+        BACKUP_BATCH_SIZE: '500',
+        BACKUP_START_SCREEN: '',
+        BACKUP_TEST_SIZE_ESTIMATION: '',
+        DEV_AUTH_STATE: '',
+        USE_FIREBASE_EMULATOR: process.env.USE_FIREBASE_EMULATOR || 'false',
+        TEST_READWISE_API_KEY: process.env.TEST_READWISE_API_KEY ?? '',
+    }
+
+    if (mode === 'development') {
+        if (
+            process.env.DEV_AUTH_STATE === '' ||
+            process.env.DEV_AUTH_STATE == null
+        ) {
+            console.warn(
+                `AUTH: Firebase auth will use staging credentials. See authentication/readme.md for more auth options.`,
+            )
+            env.DEV_AUTH_STATE = 'staging'
+        } else {
+            env.DEV_AUTH_STATE = process.env.DEV_AUTH_STATE
+            console.info(
+                `AUTH: Firebase auth state set to: ${env.DEV_AUTH_STATE}`,
+            )
+        }
+    }
+
+    // Analytics
+    if (mode === 'development' && process.env.DEV_ANALYTICS !== 'true') {
+        console.warn(
+            `Turning off analytics for extension development, set DEV_ANALYTICS=true if you're hacking on analytics`,
+        )
+        env.SENTRY_DSN = ''
+    } else if (mode === 'production' || process.env.DEV_ANALYTICS === 'true') {
+        if (process.env.DEV_ANALYTICS === 'true') {
+            console.warn(
+                `Forcing analytics to be enabled, but BE CAREFUL: this will send events to the production analytics backend`,
+            )
+        }
+    }
+
+    return {
+        defaultEnv: env,
+        envPath,
+    }
+}

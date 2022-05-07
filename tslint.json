@@ -1,0 +1,67 @@
+{
+    "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+    "defaultSeverity": "warning",
+    "jsRules": {
+        "no-empty": true
+    },
+    "linterOptions": {
+        "exclude": ["node_modules/**/*", "src/**/*.{js,jsx}", "external/**/*"]
+    },
+    "rules": {
+        "adjacent-overload-signatures": false,
+        "array-type": false,
+        "class-name": true,
+        "comment-format": [true, "check-space"],
+        "curly": true,
+        "forin": true,
+        "interface-name": [true, "never-prefix"],
+        "jsdoc-format": true,
+        "jsx-no-multiline-js": false,
+        "jsx-boolean-value": false,
+        "jsx-no-lambda": false,
+        "label-position": true,
+        "max-classes-per-file": false,
+        "member-access": false,
+        "member-ordering": false,
+        "no-arg": true,
+        "no-console": [true, "debug", "info", "trace", "log"],
+        "no-construct": true,
+        "no-debugger": true,
+        "no-duplicate-variable": true,
+        "no-empty": false,
+        "no-empty-interface": false,
+        "no-eval": true,
+        "no-implicit-dependencies": [
+            true,
+            "dev",
+            ["user-logic", "simple-signalling", "src"]
+        ],
+        "no-object-literal-type-assertion": false,
+        "no-shadowed-variable": true,
+        "no-string-literal": false,
+        "no-switch-case-fall-through": true,
+        "no-submodule-imports": false,
+        "no-unused-vars": false,
+        "no-unused-expression": false,
+        "no-var-requires": false,
+        "object-literal-sort-keys": false,
+        "only-arrow-functions": false,
+        "ordered-imports": false,
+        "prefer-const": true,
+        "radix": true,
+        "switch-default": true,
+        "strict-type-predicates": false,
+        "trailing-comma": true,
+        "triple-equals": [true, "allow-null-check"],
+        "typedef": [true, "property-declaration"],
+        "valid-jsdoc": false,
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore",
+            "allow-pascal-case"
+        ],
+        "semicolon": false
+    }
+}
